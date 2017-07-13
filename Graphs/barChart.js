@@ -7,8 +7,12 @@ var barChart = function () {
         "svgwidth" : 900,
         "svgheight" : 500,
         "barcolour" : "black",
-        "margin":{"top":10, "bottom":30, "left":30,right:10}
-        //TODO "barspacing": fraction of bar width;
+        "datavalues": function(d,i){return d;},
+        "labels":function(d,i){return i;},
+        "margin":{"top":10, "bottom":30, "left":30,right:10},
+        "barspacingratio": 0.95,
+        "xLabel":"",
+        "yLavel":"",
     }, data = [], svgContainer = "", svg;
 
     // Usable dims
@@ -23,11 +27,13 @@ var barChart = function () {
     var xAxis;
     var yAxis;
 
+    //Set global fields
     function setfields(){
         width = local.svgwidth-local.margin.left-local.margin.right;
         height = local.svgheight - local.margin.top - local.margin.bottom;
     }
-    //Only set values if they are provided
+
+    //Set any config values passed
     function configure(config) {
         if (config != undefined){
             var keyValues = Object.keys(config);
@@ -62,8 +68,13 @@ var barChart = function () {
         //Dimensions for svg
         svg = d3.select(this.svgContainer)
             .attr("width", local.svgwidth)
-            .attr("height", local.svgheight)
-            .append("g")
+            .attr("height", local.svgheight);
+
+        svg.selectAll("g")
+            .remove()
+            .exit();
+
+        svg = svg.append("g")
             .attr("transform", "translate(" + local.margin.left + ", " + local.margin.top + ")");
 
         //Define scale  + ranges
@@ -93,10 +104,17 @@ var barChart = function () {
     function update (data) {
 
         //Ranges
-        yScale.domain([0, d3.max(data)]);
-        xScale.domain(data, function(d,i){
-                                    return i;
-                                     });
+        yScale.domain([0, d3.max(data,
+                    function(d, i){
+                        return local.datavalues(d,i);
+                    })
+                ]);
+
+        xScale.domain(data.map(
+                    function(d, i){
+                        return local.labels(d,i);
+                    })
+                );
 
 
         //Width of each bar
@@ -104,18 +122,24 @@ var barChart = function () {
 
         //Join data
         var bars = svg.selectAll(".bar")
-                        .remove()
-                        .exit()
-                        .data(data);
+        .remove()
+        .exit()
+        .data(data);
 
         //Draw bars
         bars.enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("y", function(d){return yScale(d);})
-            .attr("x",function(d,i){return barWidth*i})
-            .attr("height", function(d){return height - yScale(d);})
-            .attr("width", barWidth - 1)
+            .attr("y", function(d,i){
+                        return yScale(local.datavalues(d,i));
+                    })
+            .attr("x",function(d,i){
+                        return barWidth*i + barWidth*(1-local.barspacingratio)*0.5
+                    })
+            .attr("height", function(d,i){
+                        return height - yScale(local.datavalues(d,i));
+                    })
+            .attr("width", barWidth*local.barspacingratio)
             .attr("fill", local.barcolour);
 
         //Update axis

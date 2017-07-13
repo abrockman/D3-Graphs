@@ -14,8 +14,21 @@
         <script>
             var configTest = {"width":100,"height":100, "barcolour":"red"};
             var sampleData = [25, 50, 96, 75, 23, 99];
-            var sampleDataTwo = [2,10,2,3,2,4];
+            var sampleDataTwo = [2,10,2,3,4];
 
+            var structureTwo = [{"name":"first", "value":43},
+                                {"name":"second", "value":45},
+                                {"name":"third", "value":43},
+                                {"name":"forth", "value":22},
+                                {"name":"fifth", "value":43},
+                                {"name":"sixth", "value":22}];
+
+            var configStruct = {
+
+                    "datavalues":function(d,i){return d.value},
+                    "labels":function(d,i){return d.name;}
+
+            };
             /* Pass blank svg tag id, height, width and dataset*/
             barChart.init(anSVG, sampleData);
             barChart.draw();
