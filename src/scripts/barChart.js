@@ -1,6 +1,6 @@
 
 
-var barChart = function () {
+const barChart = function () {
 
     /*Default Values*/
     var local = {
@@ -160,3 +160,5 @@ var barChart = function () {
         update:update
     }
 }();
+
+export default barChart;

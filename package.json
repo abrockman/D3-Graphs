@@ -1,0 +1,27 @@
+{
+    "name": "d3_graphs",
+    "version": "1.0.0",
+    "description": "pre-build d3 graphs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npm run build:js",
+        "build:js": "rollup -c"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/abrockman/D3-Graphs.git"
+    },
+    "author": "andrew brockman",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/abrockman/D3-Graphs/issues"
+    },
+    "homepage": "https://github.com/abrockman/D3-Graphs#readme",
+    "dependencies": {
+        "d3": "~3.5.0"
+    },
+    "devDependencies": {
+        "rollup": "^0.50.0"
+    }
+}
